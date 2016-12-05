@@ -1,0 +1,1 @@
+package com.mogujie.recsys.soa.idl;import org.apache.thrift.TException;/** * Author: xiajun * Date: 15/11/02 11:44 */public class UserServiceImpl implements UserService.Iface  {    @Override    public String getSex() throws TException {        System.out.println("UserServiceImpl........................");        return "F";    }}

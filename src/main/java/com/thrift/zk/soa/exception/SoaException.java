@@ -1,0 +1,1 @@
+package com.thrift.zk.soa.exception;/** * Author: xiajun * Date: 15/10/31 22:32 */public class SoaException extends RuntimeException {    public SoaException(String msg) {        super(msg);    }    public SoaException(Exception e) {        super(e);    }    public SoaException(String msg, Exception e) {        super(msg, e);    }}

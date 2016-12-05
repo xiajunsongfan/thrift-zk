@@ -1,0 +1,1 @@
+package com.thrift.zk.soa.exception;/** * Author: xiajun * Date: 15/10/31 22:36 */public class ThriftConnectionException extends SoaException {    public ThriftConnectionException(String msg, Exception e) {        super(msg, e);    }}
