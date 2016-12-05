@@ -1,4 +1,4 @@
-## 推荐Base模块
+## thrift-zk模块
 ---
 ###模块介绍：  
 base-soa: 集成zookeeper thrift, 服务端可多机部署，客户端自动发现服务上下线，目前只实现了轮询分流
