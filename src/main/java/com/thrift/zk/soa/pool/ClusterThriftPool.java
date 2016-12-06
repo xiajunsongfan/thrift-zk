@@ -3,7 +3,6 @@ package com.thrift.zk.soa.pool;
 
 import com.thrift.zk.soa.thrift.NodeInfo;
 import com.thrift.zk.soa.thrift.client.ShardedThrift;
-import com.thrift.zk.soa.thrift.client.route.RpcRoute;
 
 /**
  * Author: xiajun

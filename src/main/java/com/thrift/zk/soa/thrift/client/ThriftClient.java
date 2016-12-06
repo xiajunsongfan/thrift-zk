@@ -41,10 +41,8 @@ public class ThriftClient<T> {
             sharded = new ZkThriftSharded(config.getHosts(), config.getRoute());
         }
         ThriftShardedInfo shardedInfo = new ThriftShardedInfo(sharded, config);
-        //pool = new ShardedThriftPool(config, new ShardedThriftFactory<T>(shardedInfo, poolManage));
         pool = new ClusterThriftPool(config, new ClusterThriftFactory(shardedInfo));
         poolManage.setPool(pool);
-        poolManage.setMaxTotal(sharded.getServers());
         if (config.getClientClass() == null) {
             if (!config.isUseZk()) {
                 throw new NullPointerException("Thrift client class is null.");

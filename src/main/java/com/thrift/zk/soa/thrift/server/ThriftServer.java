@@ -251,6 +251,8 @@ public class ThriftServer {
             }
             NodeInfo si = new NodeInfo(sc.getHost(), sc.getPort(), sc.getCluster());
             si.setWeight(sc.getWeight());
+            si.setRoute(sc.getRoute());
+            System.out.println(JsonUtil.toString(si));
             zkClient.create(zkNode, JsonUtil.toString(si).getBytes(Charset.forName("UTF-8")), true);
             zkClient.setData(sc.getDns(), serverClassName.getBytes(Charset.forName("UTF-8")));
         } else {

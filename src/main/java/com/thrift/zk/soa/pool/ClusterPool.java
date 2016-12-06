@@ -4,7 +4,7 @@ package com.thrift.zk.soa.pool;
 import com.thrift.zk.soa.exception.SoaException;
 import com.thrift.zk.soa.exception.ThriftConnectionException;
 import com.thrift.zk.soa.thrift.NodeInfo;
-import com.thrift.zk.soa.thrift.client.route.RpcRoute;
+import com.thrift.zk.soa.thrift.route.RpcRoute;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
 
 /**

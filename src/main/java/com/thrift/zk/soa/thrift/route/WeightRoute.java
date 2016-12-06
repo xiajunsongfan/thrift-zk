@@ -1,5 +1,5 @@
 
-package com.thrift.zk.soa.thrift.client.route;
+package com.thrift.zk.soa.thrift.route;
 
 import com.thrift.zk.soa.thrift.NodeInfo;
 import com.thrift.zk.soa.utils.MurmurHash;

@@ -1,8 +1,8 @@
 
 package com.thrift.zk.soa.pool;
 
-import com.thrift.zk.soa.thrift.client.route.RotationRoute;
-import com.thrift.zk.soa.thrift.client.route.RpcRoute;
+import com.thrift.zk.soa.thrift.route.RotationRoute;
+import com.thrift.zk.soa.thrift.route.RpcRoute;
 import com.thrift.zk.soa.utils.Constant;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 
