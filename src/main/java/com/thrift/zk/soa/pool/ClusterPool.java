@@ -190,17 +190,9 @@ public abstract class ClusterPool<T> {
     public void setMaxTotal(int total) {
         thriftPool.setMaxTotal(total);
     }
-
-    public void addObjects(String key, int count) {
-        try {
-            for (int i = 0; i < count; i++) {
-                this.thriftPool.addObject(key);
-            }
-        } catch (Exception e) {
-            throw new SoaException("Error trying to add idle objects", e);
-        }
+    public int getMaxTotal(){
+        return thriftPool.getMaxTotal();
     }
-
     public boolean isClosed() {
         return this.thriftPool.isClosed();
     }

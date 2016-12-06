@@ -31,18 +31,4 @@ public class ShardedThriftPoolManage {
             }
         }
     }
-
-    /**
-     * 根据服务节点数量计算最大连接数
-     *
-     * @param nodes
-     */
-    public void setMaxTotal(int nodes) {
-        if (pool != null && nodes > 0) {
-            int mtpk = pool.getMaxTotalPerKey();
-            int max = mtpk * nodes;
-            max = max > 5000 ? 5000 : max;//连接数不能大于5000
-            pool.setMaxTotal(max);
-        }
-    }
 }
