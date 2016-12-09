@@ -1,8 +1,7 @@
 
 package com.thrift.zk.soa.pool;
 
-import com.thrift.zk.soa.thrift.route.RotationRoute;
-import com.thrift.zk.soa.thrift.route.RpcRoute;
+import com.thrift.zk.soa.thrift.route.RouteEnum;
 import com.thrift.zk.soa.utils.Constant;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 
@@ -20,7 +19,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     private String jdns;
     private String hosts;//直连rpc时使用
     private boolean useZk;
-    private RpcRoute route = new RotationRoute();
+    private RouteEnum route = RouteEnum.RANDOM;
 
     public ThriftPoolConfig() {
         //此处设置的参数不建议覆盖，除非你非常了解common－pool和此程序
@@ -130,6 +129,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     /**
      * 每个客户端最大连接数
      * 默认为－1，表示没有限制
+     *
      * @param maxTotal
      */
     public void setMaxTotal(int maxTotal) {
@@ -149,6 +149,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
 
     /**
      * 最大空闲数应该和最大连接数使用一样的配置
+     *
      * @param maxIdlePerKey
      */
     public void setMaxIdlePerKey(int maxIdlePerKey) {
@@ -203,7 +204,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
         this.useZk = useZk;
     }
 
-    public RpcRoute getRoute() {
+    public RouteEnum getRoute() {
         return route;
     }
 
@@ -212,7 +213,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      *
      * @param route
      */
-    public void setRoute(RpcRoute route) {
+    public void setRoute(RouteEnum route) {
         this.route = route;
     }
 }

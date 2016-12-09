@@ -4,17 +4,17 @@ package com.thrift.zk.soa.thrift.client;
 import com.thrift.zk.soa.pool.ThriftPoolConfig;
 import com.thrift.zk.soa.utils.Constant;
 import com.thrift.zk.soa.thrift.NodeInfo;
-import com.thrift.zk.soa.zookeeper.ZkThriftSharded;
+import com.thrift.zk.soa.zookeeper.ThriftZkManage;
 
 /**
  * Author: xiajun
  * Date: 15/10/31 23:20
  */
 public class ThriftShardedInfo {
-    private ZkThriftSharded sharded;
+    private ThriftZkManage sharded;
     private ThriftPoolConfig config;
 
-    public ThriftShardedInfo(ZkThriftSharded sharded, ThriftPoolConfig config) {
+    public ThriftShardedInfo(ThriftZkManage sharded, ThriftPoolConfig config) {
         this.sharded = sharded;
         this.config = config;
     }

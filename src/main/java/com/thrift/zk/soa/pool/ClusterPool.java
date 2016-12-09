@@ -16,7 +16,7 @@ public abstract class ClusterPool<T> {
     private RpcRoute route;
 
     public ClusterPool(final ThriftPoolConfig poolConfig, ClusterThriftFactory factory) {
-        this.route = poolConfig.getRoute();
+        this.route = poolConfig.getRoute().getRoute();
         initPool(poolConfig, factory);
     }
 

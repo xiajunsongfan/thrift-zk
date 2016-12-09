@@ -27,7 +27,7 @@ public class ServerConfig {
     private boolean useZk = true;//是否使用zookeeper
     private String cluster = Constant.DEFAULT_CLUSTER;//默认队列
     private int weight;//服务器权重
-    private RouteEnum route = RouteEnum.RANDOM;
+    private RouteEnum route;
     private Constant.Protocol protocol = Constant.Protocol.TCOMPACTPROTOCOL;//thrift 使用的压缩协议
 
     public int getPort() {

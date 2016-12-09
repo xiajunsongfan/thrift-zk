@@ -3,7 +3,7 @@ package com.thrift.zk.soa.thrift.client;
 
 import com.thrift.zk.soa.exception.SoaException;
 import com.thrift.zk.soa.pool.*;
-import com.thrift.zk.soa.zookeeper.ZkThriftSharded;
+import com.thrift.zk.soa.zookeeper.ThriftZkManage;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,21 +33,21 @@ public class ThriftClient<T> {
      */
     public void init() {
         ShardedThriftPoolManage poolManage = new ShardedThriftPoolManage();
-        ZkThriftSharded sharded;
+        ThriftZkManage zkManage;
         if (config.isUseZk()) {
-            sharded = new ZkThriftSharded(config.getZkAddress(), config.getZkSessionTimeout(), config.getZkConnTimeout(), poolManage, config.getRoute());
-            sharded.listen(config.getJdns());
+            zkManage = new ThriftZkManage(config.getZkAddress(), config.getZkSessionTimeout(), config.getZkConnTimeout(), poolManage, config.getRoute().getRoute());
+            zkManage.listen(config.getJdns());
         } else {
-            sharded = new ZkThriftSharded(config.getHosts(), config.getRoute());
+            zkManage = new ThriftZkManage(config.getHosts(), config.getRoute().getRoute());
         }
-        ThriftShardedInfo shardedInfo = new ThriftShardedInfo(sharded, config);
+        ThriftShardedInfo shardedInfo = new ThriftShardedInfo(zkManage, config);
         pool = new ClusterThriftPool(config, new ClusterThriftFactory(shardedInfo));
         poolManage.setPool(pool);
         if (config.getClientClass() == null) {
             if (!config.isUseZk()) {
                 throw new NullPointerException("Thrift client class is null.");
             }
-            config.setClientClass(buildClientClass(sharded.getServerName(config.getJdns())));
+            config.setClientClass(buildClientClass(zkManage.getServerName(config.getJdns())));
         }
     }
 
