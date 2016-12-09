@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * 随机获取一个服务节点
  * Author: xiajun
- * Date: 15/12/17 12:18
+ * Date: 16/12/01 12:18
  */
 public class RandomRoute extends RotationRoute {
     private Random random = new Random();

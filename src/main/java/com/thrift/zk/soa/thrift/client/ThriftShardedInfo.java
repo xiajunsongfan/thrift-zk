@@ -8,7 +8,7 @@ import com.thrift.zk.soa.zookeeper.ThriftZkManage;
 
 /**
  * Author: xiajun
- * Date: 15/10/31 23:20
+ * Date: 16/10/31 23:20
  */
 public class ThriftShardedInfo {
     private ThriftZkManage sharded;

@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Author: xiajun
- * Date: 15/12/18 14:43
+ * Date: 16/12/02 14:43
  */
 public class WeightRoute extends RpcRoute {
     private TreeMap<Long, String> nodes = new TreeMap<Long, String>();

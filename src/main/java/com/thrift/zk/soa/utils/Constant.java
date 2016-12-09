@@ -6,7 +6,7 @@ package com.thrift.zk.soa.utils;
 
 /**
  * author: baichuan - xiajun
- * Date: 2014-08-09
+ * Date: 2016-08-09
  * Time: 15-36-00
  */
 public class Constant {

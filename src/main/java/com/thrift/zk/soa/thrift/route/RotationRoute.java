@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * 轮询服务节点
  * Author: xiajun
- * Date: 15/12/17 12:12
+ * Date: 16/12/01 12:12
  */
 public class RotationRoute extends RpcRoute {
     private AtomicInteger index = new AtomicInteger(0);

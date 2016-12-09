@@ -3,16 +3,21 @@ package com.thrift.zk.soa.thrift.client;
 
 import com.thrift.zk.soa.exception.SoaException;
 import com.thrift.zk.soa.pool.*;
+import com.thrift.zk.soa.thrift.server.ServerRegisterInfo;
+import com.thrift.zk.soa.utils.Constant;
 import com.thrift.zk.soa.zookeeper.ThriftZkManage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Author: xiajun
- * Date: 15/11/01 01:44
+ * Date: 16/11/01 01:44
  */
 public class ThriftClient<T> {
+    private final static Logger LOGGER = LoggerFactory.getLogger(ThriftClient.class);
     private ThriftPoolConfig config;
     private ClusterPool<ShardedThrift> pool;
     private Map<Class, Object> clients;
@@ -47,7 +52,18 @@ public class ThriftClient<T> {
             if (!config.isUseZk()) {
                 throw new NullPointerException("Thrift client class is null.");
             }
-            config.setClientClass(buildClientClass(zkManage.getServerName(config.getJdns())));
+            ServerRegisterInfo sri = zkManage.getServerName(config.getJdns());
+            config.setClientClass(buildClientClass(sri.getClassName()));
+            if (sri.getRoute() != null) {
+                zkManage.setRoute(sri.getRoute().getRoute());
+                LOGGER.warn("Client set route invalid,Use the server Settings route={}", sri.getRoute().getValue());
+                config.setRoute(sri.getRoute());
+            }
+            if (config.getProtocol() != sri.getProtocol()) {
+                Constant.Protocol tmp = config.getProtocol();
+                config.setProtocol(sri.getProtocol());
+                LOGGER.warn("Server using the {} protocol,Clients set {} protocol", sri.getProtocol().getProtocol(), tmp.getProtocol());
+            }
         }
     }
 

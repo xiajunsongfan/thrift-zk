@@ -14,7 +14,7 @@ import java.net.SocketTimeoutException;
 
 /**
  * Author: xiajun
- * Date: 2015-10-30
+ * Date: 2016-10-30
  * Time: 12:01:00
  * thrift 客户端代理类
  */

@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Author: baichuan - xiajun
- * Date: 2014-08-13
+ * Date: 2016-08-13
  * Time: 18:07:00
  */
 public class WorkerThreadFactory implements ThreadFactory {

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Author: xiajun
- * Date: 15/12/04 16:27
+ * Date: 16/12/04 16:27
  * 全局线程异常捕捉器
  */
 public class ThriftUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {

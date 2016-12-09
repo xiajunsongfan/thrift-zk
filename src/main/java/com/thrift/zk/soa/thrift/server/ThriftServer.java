@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Author:  xiajun
- * Date: 15/10/31 22:22
+ * Date: 16/10/31 22:22
  */
 public class ThriftServer {
     private final static Logger LOGGER = LoggerFactory.getLogger(ThriftServer.class);
@@ -252,7 +252,7 @@ public class ThriftServer {
             NodeInfo si = new NodeInfo(sc.getHost(), sc.getPort(), sc.getCluster());
             si.setWeight(sc.getWeight());
             zkClient.create(zkNode, JsonUtil.toString(si).getBytes(Charset.forName("UTF-8")), true);
-            ServerRegisterInfo sri = new ServerRegisterInfo(serverClassName, sc.getRoute());
+            ServerRegisterInfo sri = new ServerRegisterInfo(serverClassName, sc.getRoute(), sc.getProtocol());
             zkClient.setData(sc.getDns(), JsonUtil.toString(sri).getBytes(Charset.forName("UTF-8")));
         } else {
             LOGGER.error("Server is not registered to zookeeper.");

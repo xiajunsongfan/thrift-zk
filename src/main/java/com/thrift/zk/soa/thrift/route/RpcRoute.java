@@ -9,7 +9,7 @@ import java.util.*;
  * 漏油选取服务器
  * 注意线程安全问题
  * Author: xiajun
- * Date: 15/12/17 11:55
+ * Date: 16/12/01 11:55
  */
 public abstract class RpcRoute {
     protected Map<String, NodeInfo> serverNodes = new HashMap<String, NodeInfo>();//存放所有服务节点，创建对象时从这里提取

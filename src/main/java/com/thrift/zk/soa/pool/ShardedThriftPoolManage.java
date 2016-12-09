@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Author: xiajun
- * Date: 15/11/02 14:50
+ * Date: 16/11/02 14:50
  */
 public class ShardedThriftPoolManage {
     private final static Logger LOGGER = LoggerFactory.getLogger(ShardedThriftPoolManage.class);

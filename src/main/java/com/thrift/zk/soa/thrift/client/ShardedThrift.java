@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * Author: xiajun
- * Date: 15/10/31 22:45
+ * Date: 16/10/31 22:45
  */
 public class ShardedThrift<T> {
     private final static Logger LOGGER = LoggerFactory.getLogger(ShardedThrift.class);
