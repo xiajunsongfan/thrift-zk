@@ -17,7 +17,10 @@
                 .setSelectorThreads(4)         //服务通信处理线程
                 .setWorkerThreads(2000)         //服务工作线程最大数
                 .setClientTimeout(1000)         //服务通信read超时
+                .setRoute(RouteEnum.WEIGHT)     //设置路由策略
+                .setWeight(15)                  //设置本机服务权重值为15，注意：并不是15%的意思
                 .setUseZk(true);                //使用zookeeper集群管理服务
+
         ThriftServer server = new ThriftServer(sc, new UserInfoImpl()); //UserInfoImpl.class 为thrift服务实现类
         //ThriftServer server = new ThriftServer(sc, new UserInfoImpl(), new UserServiceImpl());//多服务实现模式，UserInfoImpl UserServiceImpl 两个是不同thrift服务实现类
         server.start();
@@ -31,6 +34,7 @@
         //config.setClientClass(UserInfo.Client.class, UserService.Client.class);//本地模式时使用，设置client
         config.setConnTotal(10);//client会对每个server创建最多10个连接
         config.setUseZk(true);//使用zookeeper管理client
+        config.setRoute(RouteEnum.RANDOM);//客户端设置的路由策略，如果服务端设置过(并且使用ZK管理时)，这次设置将被服务端的设置覆盖
         //config.setHosts("127.0.0.1:9091"); //本地模式时直连rpc服务
         config.setProtocol(Constant.Protocol.TCOMPACTPROTOCOL);//thrift通信压缩模式
         ThriftClient thriftClient = new ThriftClient(config);
