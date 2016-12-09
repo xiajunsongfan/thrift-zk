@@ -6,6 +6,7 @@
 
 ###模块使用：
 	
+```java
 	thrift server:
 	public static void main(String[] args) throws Exception {
         ServerConfig sc = new ServerConfig();
@@ -42,3 +43,4 @@
         //UserService.Iface client = (UserService.Iface) thriftClient.getClient(UserService.Client.class);
         int age = client.getAge();
     }
+```
