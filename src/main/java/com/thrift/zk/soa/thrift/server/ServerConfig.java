@@ -1,4 +1,3 @@
-
 package com.thrift.zk.soa.thrift.server;
 
 import com.thrift.zk.soa.thrift.route.RouteEnum;

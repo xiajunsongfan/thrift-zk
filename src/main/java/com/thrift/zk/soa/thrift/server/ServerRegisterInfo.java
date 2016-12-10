@@ -8,24 +8,24 @@ import com.thrift.zk.soa.utils.Constant;
  * Date: 2016/12/09 10:41
  */
 public class ServerRegisterInfo {
-    private String className;//服务类名
+    private String[] className;//服务类名
     private RouteEnum route;//分流策略
     private Constant.Protocol protocol;//thrift协议类型
 
     public ServerRegisterInfo() {
     }
 
-    public ServerRegisterInfo(String className, RouteEnum route,Constant.Protocol protocol) {
+    public ServerRegisterInfo(String[] className, RouteEnum route, Constant.Protocol protocol) {
         this.className = className;
         this.route = route;
         this.protocol = protocol;
     }
 
-    public String getClassName() {
+    public String[] getClassName() {
         return className;
     }
 
-    public void setClassName(String className) {
+    public void setClassName(String[] className) {
         this.className = className;
     }
 

@@ -1,4 +1,3 @@
-
 package com.thrift.zk.soa.thrift.client;
 
 import com.thrift.zk.soa.exception.SoaException;

@@ -1,4 +1,3 @@
-
 package com.thrift.zk.soa.thrift.route;
 
 import com.thrift.zk.soa.thrift.NodeInfo;

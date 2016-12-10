@@ -1,4 +1,3 @@
-
 package com.thrift.zk.soa.pool;
 
 import org.slf4j.Logger;
@@ -19,7 +18,7 @@ public class ShardedThriftPoolManage {
     /**
      * 当服务器节点被删除时，要对连接池中的对象进行有效性检查
      *
-     * @param shardid
+     * @param shardid 服务节点
      */
     public void deletePoolObject(String shardid) {
         if (pool != null) {

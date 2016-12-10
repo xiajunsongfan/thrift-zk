@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2016. mogujie
- */
-
 package com.thrift.zk.soa.thrift.server;
 
 import java.util.concurrent.ThreadFactory;

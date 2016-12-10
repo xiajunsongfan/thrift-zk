@@ -1,4 +1,3 @@
-
 package com.thrift.zk.soa.thrift.server;
 
 import com.thrift.zk.soa.exception.SoaException;
@@ -41,7 +40,7 @@ public class ThriftServer {
     private Object[] serverImpls;
     private ZkClient zkClient;
     private TServer server;
-    private String serverClassName = "";//服务程序名称
+    private String[] serverClassName;//服务程序名称
     private ServerConfig sc;//
     private String zkNode;//dns + ip:host
     private boolean multi;//启动模式
@@ -55,6 +54,7 @@ public class ThriftServer {
         if (serverImpl == null || serverImpl.length < 1) {
             throw new NullPointerException("Service impl class is null.");
         }
+        serverClassName = new String[serverImpl.length];
         this.serverImpls = serverImpl;
         this.sc = sc;
     }
@@ -62,22 +62,22 @@ public class ThriftServer {
     /**
      * 多Processor模式
      *
-     * @return
-     * @throws Exception
+     * @return TProcessor
+     * @throws Exception e
      */
     private TProcessor createMultiProcessor() throws Exception {
         multi = true;
         TMultiplexedProcessor processors = new TMultiplexedProcessor();
-        for (Object serverImpl : serverImpls) {
+        for (int i = 0; i < serverImpls.length; i++) {
+            Object serverImpl = serverImpls[i];
             Class[] classes = serverImpl.getClass().getInterfaces();//服务实现的接口
-            Object impl = serverImpl;
             String processorName = null;
             Class ifaceClass = null;
             for (Class aClass : classes) {
                 if (aClass.getName().endsWith("$Iface")) {
                     processorName = aClass.getName().replace("$Iface", "$Processor");
                     String ifaceName = aClass.getName();
-                    serverClassName += ifaceName.replace("$Iface", ",");
+                    serverClassName[i] = ifaceName.replace("$Iface", "");
                     ifaceClass = aClass;
                     break;
                 }
@@ -88,18 +88,17 @@ public class ThriftServer {
             }
             Class proClazz = Class.forName(processorName);
             Constructor constructor = proClazz.getConstructor(ifaceClass);
-            TProcessor processor = (TProcessor) constructor.newInstance(impl);
+            TProcessor processor = (TProcessor) constructor.newInstance(serverImpl);
             processors.registerProcessor(getServerName(ifaceClass), processor);
         }
-        serverClassName = serverClassName.substring(0, serverClassName.length() - 1);
         return processors;
     }
 
     /**
      * 单Processor模式
      *
-     * @return
-     * @throws Exception
+     * @return TProcessor
+     * @throws Exception e
      */
     private TProcessor createProcessor() throws Exception {
         if (serverImpls == null || serverImpls.length < 1) {
@@ -113,7 +112,7 @@ public class ThriftServer {
             if (aClass.getName().endsWith("$Iface")) {
                 processorName = aClass.getName().replace("$Iface", "$Processor");
                 String ifaceName = aClass.getName();
-                serverClassName += ifaceName.replace("$Iface", "");
+                serverClassName[0] = ifaceName.replace("$Iface", "");
                 ifaceClass = aClass;
                 break;
             }
@@ -124,17 +123,16 @@ public class ThriftServer {
         }
         Class proClazz = Class.forName(processorName);
         Constructor constructor = proClazz.getConstructor(ifaceClass);
-        TProcessor processor = (TProcessor) constructor.newInstance(impl);
-        return processor;
+        return  (TProcessor) constructor.newInstance(impl);
     }
 
     /**
      * 创建服务
      *
      * @return ThriftServer
-     * @throws Exception
+     * @throws Exception e
      */
-    public ThriftServer build() throws Exception {
+    private ThriftServer build() throws Exception {
         TProcessor processor;
         if (serverImpls.length > 1) {
             processor = createMultiProcessor();
@@ -156,10 +154,10 @@ public class ThriftServer {
     /**
      * 创建thrift异步服务端
      *
-     * @param host
-     * @param processor
-     * @throws TTransportException
-     * @throws UnknownHostException
+     * @param host 服务端地址
+     * @param processor thrift处理器
+     * @throws TTransportException e
+     * @throws UnknownHostException e
      */
     private void createThriftServer(String host, TProcessor processor) throws TTransportException, UnknownHostException {
         InetSocketAddress address = new InetSocketAddress(InetAddress.getByName(host), sc.getPort());
@@ -225,7 +223,6 @@ public class ThriftServer {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
         if (!server.isServing()) {
@@ -236,9 +233,9 @@ public class ThriftServer {
     /**
      * 向zookeeper中添加本服务节点
      *
-     * @throws Exception
+     * @throws Exception e
      */
-    void addZkNode() throws Exception {
+    private void addZkNode() throws Exception {
         if (sc.getDns() != null && sc.getZkAddress() != null) {
             zkClient = new ZkClient(sc.getZkAddress(), sc.getZkSessionTimeout(), sc.getZkConnTimeout());
             if (!zkClient.exists(sc.getDns())) {
@@ -263,8 +260,8 @@ public class ThriftServer {
     /**
      * 获取服务名称
      *
-     * @param clazz
-     * @return
+     * @param clazz 接口类
+     * @return String
      */
     private String getServerName(Class clazz) {
         String[] packages = clazz.getCanonicalName().split("\\.");
@@ -277,7 +274,7 @@ public class ThriftServer {
     /**
      * 停止服务
      */
-    public void stop() {
+    private void stop() {
         String sinfo = zkNode;
         if (zkNode == null) {
             sinfo = sc.getHost() + ":" + sc.getPort();

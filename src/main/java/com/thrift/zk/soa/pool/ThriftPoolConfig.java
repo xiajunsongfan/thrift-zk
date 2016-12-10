@@ -1,4 +1,3 @@
-
 package com.thrift.zk.soa.pool;
 
 import com.thrift.zk.soa.thrift.route.RouteEnum;
@@ -42,7 +41,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      * 可以设置一个或多个client，这要根据服务端启动的模式来决定，
      * 服务端启动时是多server模式，客户端应该对应使用多client模式，
      *
-     * @param clientClass
+     * @param clientClass 接口类
      */
     public void setClientClass(Class... clientClass) {
         this.clientClass = clientClass;
@@ -56,7 +55,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      * thrift客户端调用rpc时的超时，
      * 默认值 1s
      *
-     * @param readTimeout
+     * @param readTimeout 读取超时
      */
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
@@ -70,7 +69,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      * thirft通信压缩模式
      * 默认值 TCompactProtocol，可选值 TBinaryProtocol
      *
-     * @param protocol
+     * @param protocol thrift协议
      */
     public void setProtocol(Constant.Protocol protocol) {
         this.protocol = protocol;
@@ -84,7 +83,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      * 设置zookeeper集群地址
      * 地址格式 ip:port,ip:port
      *
-     * @param zkAddress
+     * @param zkAddress zookeeper地址
      */
     public void setZkAddress(String zkAddress) {
         this.zkAddress = zkAddress;
@@ -98,7 +97,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      * 设置zookeeper 会话超时时间
      * 默认值 3000ms
      *
-     * @param zkSessionTimeout
+     * @param zkSessionTimeout  zookeeper 会话超时
      */
     public void setZkSessionTimeout(int zkSessionTimeout) {
         this.zkSessionTimeout = zkSessionTimeout;
@@ -120,7 +119,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      * 设置zookeeper连接超时
      * 默认值 5000ms
      *
-     * @param zkConnTimeout
+     * @param zkConnTimeout zookeeper连接超时
      */
     public void setZkConnTimeout(int zkConnTimeout) {
         this.zkConnTimeout = zkConnTimeout;
@@ -130,7 +129,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      * 每个客户端最大连接数
      * 默认为－1，表示没有限制
      *
-     * @param maxTotal
+     * @param maxTotal 客户端最大连接数
      */
     public void setMaxTotal(int maxTotal) {
         super.setMaxTotal(maxTotal);
@@ -141,7 +140,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      * 3台server：总连接数 ＝ 3 * connTotal
      * 不能超过最大连接数
      *
-     * @param connTotal
+     * @param connTotal 连接到每台服务器的最大连接数
      */
     public void setConnTotal(int connTotal) {
         super.setMaxTotalPerKey(connTotal);
@@ -150,7 +149,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     /**
      * 最大空闲数应该和最大连接数使用一样的配置
      *
-     * @param maxIdlePerKey
+     * @param maxIdlePerKey 最大空闲数
      */
     public void setMaxIdlePerKey(int maxIdlePerKey) {
         super.setMaxIdlePerKey(-1);
@@ -160,7 +159,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      * 返回连接池时检测是无意义的因此注掉该功能
      * 设置任何值都是无效的。
      *
-     * @param testOnReturn
+     * @param testOnReturn 是否检测
      */
     @Deprecated
     public void setTestOnReturn(boolean testOnReturn) {
@@ -171,7 +170,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      * 由于使用zookeeper时必须开启检查功能
      * 所以该方法被重写，设置任何值都是无效的。
      *
-     * @param testWhileIdle
+     * @param testWhileIdle 是否检测失效连接
      */
     public void setTestWhileIdle(boolean testWhileIdle) {
         super.setTestWhileIdle(true);//禁止关闭检查，连接池会定期检查失效连接，不允许关闭该选项
@@ -198,7 +197,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
      * 是否使用zookeeper，false为不使用，
      * 不使用zookeeper就意味着是直连rpc方式
      *
-     * @param useZk
+     * @param useZk true 使用zookeeper管理，false表示不使用zookeeper管理
      */
     public void setUseZk(boolean useZk) {
         this.useZk = useZk;
@@ -209,9 +208,9 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * 设置RPC在查询服务是使用的漏油方式，默认轮询
+     * 设置RPC在查询服务是使用的路由方式，默认轮询
      *
-     * @param route
+     * @param route 路由方式
      */
     public void setRoute(RouteEnum route) {
         this.route = route;

@@ -26,7 +26,7 @@ public class ThriftClient<T> {
      * ThriftClient应该是一个单例的，在同一个服务同一个进程中不应该出现2个
      * 该类实例
      *
-     * @param config
+     * @param config 客户端配置
      */
     public ThriftClient(ThriftPoolConfig config) {
         this.config = config;
@@ -36,7 +36,7 @@ public class ThriftClient<T> {
     /**
      * 初始化连接
      */
-    public void init() {
+    private void init() {
         ShardedThriftPoolManage poolManage = new ShardedThriftPoolManage();
         ThriftZkManage zkManage;
         if (config.isUseZk()) {
@@ -46,7 +46,7 @@ public class ThriftClient<T> {
             zkManage = new ThriftZkManage(config.getHosts(), config.getRoute().getRoute());
         }
         ThriftShardedInfo shardedInfo = new ThriftShardedInfo(zkManage, config);
-        pool = new ClusterThriftPool(config, new ClusterThriftFactory(shardedInfo));
+        pool = new ClusterThriftPool(config, new ClusterThriftFactory<ShardedThrift>(shardedInfo));
         poolManage.setPool(pool);
         if (config.getClientClass() == null) {
             if (!config.isUseZk()) {
@@ -69,9 +69,9 @@ public class ThriftClient<T> {
 
     /**
      * 获取thrift rpc客户端
-     *
+     * 多服务模式时使用
      * @param clazz 客户端字节码，目前不支持异步客户端
-     * @return
+     * @return T
      */
     public T getClient(Class clazz) {
         if (clients == null) {
@@ -87,7 +87,7 @@ public class ThriftClient<T> {
     /**
      * 获取thrift rpc客户端
      *
-     * @return
+     * @return T
      */
     public T getClient() {
         if (config.getClientClass() != null) {
@@ -99,14 +99,13 @@ public class ThriftClient<T> {
     /**
      * 根据zookeeper获取jdns提供的服务
      *
-     * @param serverClassNames
-     * @return
+     * @param serverClassNames 接口类
+     * @return Class[]
      */
-    private Class[] buildClientClass(String serverClassNames) {
-        String[] names = serverClassNames.split(",");
-        Class[] clazzs = new Class[names.length];
-        for (int i = 0; i < names.length; i++) {
-            String name = names[i];
+    private Class[] buildClientClass(String[] serverClassNames) {
+        Class[] clazzs = new Class[serverClassNames.length];
+        for (int i = 0; i < serverClassNames.length; i++) {
+            String name = serverClassNames[i];
             String clientClass = name + "$Client";
             try {
                 clazzs[i] = Class.forName(clientClass);
@@ -121,7 +120,7 @@ public class ThriftClient<T> {
      * 创建代理客户端
      *
      * @param client 客户端的Class
-     * @return
+     * @return Map
      */
     private Map<Class, Object> create(Class[] client) {
         Map<Class, Object> map = new ConcurrentHashMap<Class, Object>();

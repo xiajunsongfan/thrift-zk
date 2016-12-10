@@ -1,4 +1,3 @@
-
 package com.thrift.zk.soa.pool;
 
 import com.thrift.zk.soa.thrift.NodeInfo;

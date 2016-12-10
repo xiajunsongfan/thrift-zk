@@ -1,4 +1,3 @@
-
 package com.thrift.zk.soa.utils;
 
 import java.net.Inet4Address;
