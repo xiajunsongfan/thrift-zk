@@ -139,7 +139,19 @@ public abstract class ClusterPool<T> {
         thriftPool.evict();
     }
 
+    /**
+     * 删除一个key下的所有连接
+     *
+     * @param key 资源key
+     */
     void clear(String key) {
         thriftPool.clear(key);
+    }
+
+    /**
+     * 获取连接池的总大小
+     */
+    int getMaxTotal() {
+        return thriftPool.getMaxTotal();
     }
 }

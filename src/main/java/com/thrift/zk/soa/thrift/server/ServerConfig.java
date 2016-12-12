@@ -36,8 +36,8 @@ public class ServerConfig {
     /**
      * 设置服务器端口号
      *
-     * @param port
-     * @return
+     * @param port 端口号
+     * @return ServerConfig
      */
     public ServerConfig setPort(int port) {
         this.port = port;
@@ -49,12 +49,12 @@ public class ServerConfig {
     }
 
     /**
-     * 设置thrift selector线程数量，根据实际情况设置，
+     * 设置thrift selector线程数量。根据实际情况设置，
      * 设置标准：服务响应时间偏大类型的运用可以将该值设大，相反请设小该值
-     * 默认值：24
+     * 默认值：4
      *
-     * @param selectorThreads
-     * @return
+     * @param selectorThreads select选择器个数
+     * @return ServerConfig
      */
     public ServerConfig setSelectorThreads(int selectorThreads) {
         this.selectorThreads = selectorThreads;
@@ -66,12 +66,12 @@ public class ServerConfig {
     }
 
     /**
-     * 该参数为thrift最大工作线程数，工作线程是调用服务实现类的载体
+     * 该参数为thrift最大工作线程数。工作线程是调用服务实现类的载体
      * 设置标准：参考 setSelectorThreads，两者相通
      * 默认值：500
      *
-     * @param workerThreads
-     * @return
+     * @param workerThreads 工作线程数
+     * @return ServerConfig
      */
     public ServerConfig setWorkerThreads(int workerThreads) {
         this.workerThreads = workerThreads;
@@ -83,11 +83,11 @@ public class ServerConfig {
     }
 
     /**
-     * 设置thrift server和client通信时一次最大能读的字节数
+     * 设置thrift server和client通信时一次最大能读的字节数。
      * 默认值：1M，除非有特殊需求，否则请不要增大该值
      *
-     * @param maxReadBufferBytes
-     * @return
+     * @param maxReadBufferBytes 通讯包大小
+     * @return ServerConfig
      */
     public ServerConfig setMaxReadBufferBytes(int maxReadBufferBytes) {
         this.maxReadBufferBytes = maxReadBufferBytes;
@@ -99,11 +99,11 @@ public class ServerConfig {
     }
 
     /**
-     * 设置每个SelectorThread线程处理客户端请求时的队列大小
+     * 设置每个SelectorThread线程处理客户端请求时的队列大小。
      * 默认值：100 一般情况一下不需要重设该值
      *
-     * @param acceptQueueSizePerThread
-     * @return
+     * @param acceptQueueSizePerThread 队列大小
+     * @return ServerConfig
      */
     public ServerConfig setAcceptQueueSizePerThread(int acceptQueueSizePerThread) {
         this.acceptQueueSizePerThread = acceptQueueSizePerThread;
@@ -115,11 +115,11 @@ public class ServerConfig {
     }
 
     /**
-     * 设置thrift服务绑定的IP
+     * 设置thrift服务绑定的IP。
      * 默认值：程序会绑定到0.0.0.0上
      *
-     * @param host
-     * @return
+     * @param host IP地址
+     * @return ServerConfig
      */
     public ServerConfig setHost(String host) {
         this.host = host;
@@ -131,11 +131,11 @@ public class ServerConfig {
     }
 
     /**
-     * 设置thrift 服务端socket读取客户端数据时的超时，读超时
+     * 设置thrift 服务端socket读取客户端数据时的超时。读超时
      * 默认值：1000ms
      *
-     * @param clientTimeout
-     * @return
+     * @param clientTimeout 读取超时时间，毫秒值
+     * @return ServerConfig
      */
     public ServerConfig setClientTimeout(int clientTimeout) {
         this.clientTimeout = clientTimeout;
@@ -147,11 +147,11 @@ public class ServerConfig {
     }
 
     /**
-     * 设置thrift服务在zookeeper上的注册地址，每个不同服务应该使用不同dns
+     * 设置thrift服务在zookeeper上的注册地址。每个不同服务应该使用不同dns，
      * 如果设置 setUseZk(false),该值可不设置
      *
-     * @param dns
-     * @return
+     * @param dns zk节点
+     * @return ServerConfig
      */
     public ServerConfig setDns(String dns) {
         this.dns = dns;
@@ -163,10 +163,11 @@ public class ServerConfig {
     }
 
     /**
-     * zookeeper集群地址,格式： ip:port,ip:port
+     * zookeeper集群地址。
+     * 格式：ip:port,ip:port
      *
-     * @param zkAddress
-     * @return
+     * @param zkAddress zk服务地址
+     * @return ServerConfig
      */
     public ServerConfig setZkAddress(String zkAddress) {
         this.zkAddress = zkAddress;
@@ -178,10 +179,11 @@ public class ServerConfig {
     }
 
     /**
-     * 设置thrift 服务 工作线程使用的线程池，如果设置了该值，那么setWorkerThreads()的设置将无效
+     * 设置thrift 服务工作线程使用的线程池。
+     * 如果设置了该值，那么setWorkerThreads()的设置将无效
      *
-     * @param workerThreadPool
-     * @return
+     * @param workerThreadPool 线程池对象
+     * @return ServerConfig
      */
     public ServerConfig setWorkerThreadPool(ExecutorService workerThreadPool) {
         this.workerThreadPool = workerThreadPool;
@@ -193,11 +195,11 @@ public class ServerConfig {
     }
 
     /**
-     * 设置是否使用zookeeper对thrift服务进行管理
+     * 设置是否使用zookeeper对thrift服务进行管理。
      * true表示使用zookeeper，当为false时 意味着这个服务是个单机或者叫本地服务
      *
-     * @param useZk
-     * @return
+     * @param useZk 是否使用zk管理
+     * @return ServerConfig
      */
     public ServerConfig setUseZk(boolean useZk) {
         this.useZk = useZk;
@@ -211,8 +213,8 @@ public class ServerConfig {
     /**
      * 集群名称 暂时无实际用途
      *
-     * @param cluster
-     * @return
+     * @param cluster 集群名称
+     * @return ServerConfig
      */
     public ServerConfig setCluster(String cluster) {
         this.cluster = cluster;
@@ -224,11 +226,11 @@ public class ServerConfig {
     }
 
     /**
-     * 设置thrift 服务端使用的通信压缩模式
+     * 设置thrift 服务端使用的通信压缩模式。
      * 默认值：TCompactProtocol
      *
-     * @param protocol
-     * @return
+     * @param protocol 通讯协议
+     * @return ServerConfig
      */
     public ServerConfig setProtocol(Constant.Protocol protocol) {
         this.protocol = protocol;
@@ -240,10 +242,10 @@ public class ServerConfig {
     }
 
     /**
-     * 设置zookeeper 会话超时时间
-     *
-     * @param zkSessionTimeout
-     * @return
+     * 设置zookeeper 会话超时时间。
+     * 数值越小服务宕机后越早被发现，但越容易出现对网络闪断的误判
+     * @param zkSessionTimeout 会话超时时间
+     * @return ServerConfig
      */
     public ServerConfig setZkSessionTimeout(int zkSessionTimeout) {
         this.zkSessionTimeout = zkSessionTimeout;
@@ -255,10 +257,10 @@ public class ServerConfig {
     }
 
     /**
-     * 设置zookeeper连接超时时间
+     * 设置zookeeper连接超时时间。
      *
-     * @param zkConnTimeout
-     * @return
+     * @param zkConnTimeout 连接超时，毫秒
+     * @return ServerConfig
      */
     public ServerConfig setZkConnTimeout(int zkConnTimeout) {
         this.zkConnTimeout = zkConnTimeout;
@@ -270,9 +272,10 @@ public class ServerConfig {
     }
 
     /**
-     * 服务器权重,权重越大需要处理的请求越多,目前权重范围[1-10]
+     * 服务器权重。
+     * 权重越大需要处理的请求越多
      *
-     * @param weight
+     * @param weight 权重
      */
     public ServerConfig setWeight(int weight) {
         this.weight = weight;
@@ -284,10 +287,10 @@ public class ServerConfig {
     }
 
     /**
-     * 设置分流方式
+     * 设置路由方式。
      * default: RouteEnum.RANDOM
-     * @param route
-     * @return
+     * @param route 路由方式
+     * @return ServerConfig
      */
     public ServerConfig setRoute(RouteEnum route) {
         this.route = route;

@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Author: xiajun
  * Date: 16/11/01 01:44
+ * Thrift客户端对象，该客户端是经过代理封装过。
  */
 public class ThriftClient<T> {
     private final static Logger LOGGER = LoggerFactory.getLogger(ThriftClient.class);
@@ -23,8 +24,8 @@ public class ThriftClient<T> {
     private Map<Class, Object> clients;
 
     /**
-     * ThriftClient应该是一个单例的，在同一个服务同一个进程中不应该出现2个
-     * 该类实例
+     * ThriftClient应该是一个单例的，
+     * 在同一个服务同一个进程中不应该出现2个该类实例
      *
      * @param config 客户端配置
      */
@@ -41,17 +42,6 @@ public class ThriftClient<T> {
         ThriftZkManage zkManage;
         if (config.isUseZk()) {
             zkManage = new ThriftZkManage(config.getZkAddress(), config.getZkSessionTimeout(), config.getZkConnTimeout(), poolManage, config.getRoute().getRoute());
-            zkManage.listen(config.getJdns());
-        } else {
-            zkManage = new ThriftZkManage(config.getHosts(), config.getRoute().getRoute());
-        }
-        ThriftShardedInfo shardedInfo = new ThriftShardedInfo(zkManage, config);
-        pool = new ClusterThriftPool(config, new ClusterThriftFactory<ShardedThrift>(shardedInfo));
-        poolManage.setPool(pool);
-        if (config.getClientClass() == null) {
-            if (!config.isUseZk()) {
-                throw new NullPointerException("Thrift client class is null.");
-            }
             ServerRegisterInfo sri = zkManage.getServerName(config.getJdns());
             config.setClientClass(buildClientClass(sri.getClassName()));
             if (sri.getRoute() != null) {
@@ -64,12 +54,24 @@ public class ThriftClient<T> {
                 config.setProtocol(sri.getProtocol());
                 LOGGER.warn("Server using the {} protocol,Clients set {} protocol", sri.getProtocol().getProtocol(), tmp.getProtocol());
             }
+            zkManage.listen(config.getJdns());
+        } else {
+            zkManage = new ThriftZkManage(config.getHosts(), config.getRoute().getRoute());
+        }
+        ThriftShardedInfo shardedInfo = new ThriftShardedInfo(zkManage, config);
+        pool = new ClusterThriftPool(config, new ClusterThriftFactory<ShardedThrift>(shardedInfo));
+        poolManage.setPool(pool);
+        if (config.getClientClass() == null) {
+            if (!config.isUseZk()) {
+                throw new NullPointerException("Thrift client class is null.");
+            }
         }
     }
 
     /**
-     * 获取thrift rpc客户端
+     * 获取thrift rpc客户端。
      * 多服务模式时使用
+     *
      * @param clazz 客户端字节码，目前不支持异步客户端
      * @return T
      */
@@ -85,7 +87,7 @@ public class ThriftClient<T> {
     }
 
     /**
-     * 获取thrift rpc客户端
+     * 获取thrift rpc客户端。
      *
      * @return T
      */
@@ -97,7 +99,7 @@ public class ThriftClient<T> {
     }
 
     /**
-     * 根据zookeeper获取jdns提供的服务
+     * 根据zookeeper获取jdns提供的服务。
      *
      * @param serverClassNames 接口类
      * @return Class[]
@@ -117,7 +119,7 @@ public class ThriftClient<T> {
     }
 
     /**
-     * 创建代理客户端
+     * 创建代理客户端。
      *
      * @param client 客户端的Class
      * @return Map

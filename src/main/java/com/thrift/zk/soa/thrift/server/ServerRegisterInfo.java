@@ -9,7 +9,7 @@ import com.thrift.zk.soa.utils.Constant;
  */
 public class ServerRegisterInfo {
     private String[] className;//服务类名
-    private RouteEnum route;//分流策略
+    private RouteEnum route;//路由策略
     private Constant.Protocol protocol;//thrift协议类型
 
     public ServerRegisterInfo() {

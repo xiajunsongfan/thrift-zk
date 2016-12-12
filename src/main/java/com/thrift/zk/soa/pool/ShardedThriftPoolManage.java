@@ -16,6 +16,7 @@ public class ShardedThriftPoolManage {
     }
 
     /**
+     * 删除服务器连接。
      * 当服务器节点被删除时，要对连接池中的对象进行有效性检查
      *
      * @param shardid 服务节点
@@ -24,9 +25,9 @@ public class ShardedThriftPoolManage {
         if (pool != null) {
             try {
                 pool.clear(shardid);
-                LOGGER.warn("Rpc server node close " + shardid);
+                LOGGER.warn("Rpc server node {} close.", shardid);
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.error("Rpc server node {} close.", shardid, e);
             }
         }
     }

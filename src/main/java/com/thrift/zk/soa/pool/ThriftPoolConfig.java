@@ -7,6 +7,7 @@ import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 /**
  * Author: xiajun
  * Date: 16/02/01 14:32
+ * Thrift客户端连接池配置
  */
 public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     private Class[] clientClass;
@@ -37,6 +38,8 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
+     * 设置接口类CLASS对象。
+     * <p>
      * 此参数设置在不使用zookeeper模式下必须设置，使用zookeeper时不建议设置
      * 可以设置一个或多个client，这要根据服务端启动的模式来决定，
      * 服务端启动时是多server模式，客户端应该对应使用多client模式，
@@ -52,10 +55,9 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * thrift客户端调用rpc时的超时，
-     * 默认值 1s
+     * thrift客户端调用rpc时的超时。
      *
-     * @param readTimeout 读取超时
+     * @param readTimeout default 1s 读取超时
      */
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
@@ -66,7 +68,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * thirft通信压缩模式
+     * thirft通信压缩模式。
      * 默认值 TCompactProtocol，可选值 TBinaryProtocol
      *
      * @param protocol thrift协议
@@ -80,7 +82,7 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * 设置zookeeper集群地址
+     * 设置zookeeper集群地址。
      * 地址格式 ip:port,ip:port
      *
      * @param zkAddress zookeeper地址
@@ -94,10 +96,10 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * 设置zookeeper 会话超时时间
+     * 设置zookeeper 会话超时时间。
      * 默认值 3000ms
      *
-     * @param zkSessionTimeout  zookeeper 会话超时
+     * @param zkSessionTimeout zookeeper 会话超时
      */
     public void setZkSessionTimeout(int zkSessionTimeout) {
         this.zkSessionTimeout = zkSessionTimeout;
@@ -111,12 +113,20 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
         return jdns;
     }
 
+    /**
+     * 设置服务在zk上的节点。
+     * <p>
+     * 该节点代表一个服务，相同的服务应该使用同一个节点。
+     * </p>
+     *
+     * @param jdns zk中的节点.
+     */
     public void setJdns(String jdns) {
         this.jdns = jdns;
     }
 
     /**
-     * 设置zookeeper连接超时
+     * 设置zookeeper连接超时。
      * 默认值 5000ms
      *
      * @param zkConnTimeout zookeeper连接超时
@@ -126,18 +136,19 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * 每个客户端最大连接数
+     * 每个客户端连接到集群的最大连接数。
+     * 不建议设置此值，建议设置 <code>{@link #setConnTotal(int connTotal)})</code>.
      * 默认为－1，表示没有限制
      *
-     * @param maxTotal 客户端最大连接数
+     * @param maxTotal  客户端最大连接数
      */
     public void setMaxTotal(int maxTotal) {
         super.setMaxTotal(maxTotal);
     }
 
     /**
-     * 与每台server建立的socket连接数，注意不是总连接数，
-     * 3台server：总连接数 ＝ 3 * connTotal
+     * 设置鱼每台server建立的socket连接数。注意不是总连接数，
+     * 3台server：总连接数 ＝ 3 * connTotal<br>
      * 不能超过最大连接数
      *
      * @param connTotal 连接到每台服务器的最大连接数
@@ -147,7 +158,8 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * 最大空闲数应该和最大连接数使用一样的配置
+     * 设置最大空闲数应该。
+     * 应该和最大连接数使用一样的配置。
      *
      * @param maxIdlePerKey 最大空闲数
      */
@@ -156,7 +168,8 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * 返回连接池时检测是无意义的因此注掉该功能
+     * 设置连接返回连接池时是否进行检测连接有效性。
+     * 返回连接池时检测是无意义的因此注掉该功能。<br>
      * 设置任何值都是无效的。
      *
      * @param testOnReturn 是否检测
@@ -167,7 +180,8 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * 由于使用zookeeper时必须开启检查功能
+     * 设置是否开启定时连接有效性检测。
+     * 由于使用zookeeper时必须开启检查功能。<br>
      * 所以该方法被重写，设置任何值都是无效的。
      *
      * @param testWhileIdle 是否检测失效连接
@@ -181,7 +195,8 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * 直连rpc时设置的服务IP:port地址
+     * 设置服务端连接地址。
+     * 直连rpc时设置的服务IP:port地址。
      *
      * @param hosts ip:port,ip:port
      */
@@ -194,7 +209,8 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * 是否使用zookeeper，false为不使用，
+     * 设置是否使用zookeeper。
+     * false为不使用
      * 不使用zookeeper就意味着是直连rpc方式
      *
      * @param useZk true 使用zookeeper管理，false表示不使用zookeeper管理
@@ -208,7 +224,8 @@ public class ThriftPoolConfig extends GenericKeyedObjectPoolConfig {
     }
 
     /**
-     * 设置RPC在查询服务是使用的路由方式，默认轮询
+     * 设置RPC的路由方式。
+     * 默认轮询
      *
      * @param route 路由方式
      */
