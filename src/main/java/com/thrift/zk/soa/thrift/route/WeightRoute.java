@@ -27,7 +27,22 @@ public class WeightRoute extends RpcRoute {
         } else {
             ni = tail.get(tail.firstKey());
         }
-        return serverNodes.get(ni);
+        NodeInfo info = serverNodes.get(ni);
+        if (info == null) {
+            lock.readLock().lock();
+            try {
+                tail = nodes.tailMap(random.nextLong());
+                if (tail.isEmpty()) {
+                    ni = nodes.get(nodes.firstKey());
+                } else {
+                    ni = tail.get(tail.firstKey());
+                }
+                info = serverNodes.get(ni);
+            } finally {
+                lock.readLock().unlock();
+            }
+        }
+        return info;
     }
 
     @Override
@@ -57,9 +72,9 @@ public class WeightRoute extends RpcRoute {
     @Override
     public boolean removeServerNode(String key) {
         boolean res = false;
+        serverNodes.remove(key);
         lock.writeLock().lock();
         try {
-            serverNodes.remove(key);
             TreeMap<Long, String> newNodes = new TreeMap<Long, String>();
             Iterator<Long> it = nodes.keySet().iterator();
             while (it.hasNext()) {
