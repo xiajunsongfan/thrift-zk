@@ -13,59 +13,37 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class RotationRoute extends RpcRoute {
     private AtomicInteger index = new AtomicInteger(0);
-    protected ReadWriteLock lock = new ReentrantReadWriteLock();
 
     @Override
     public boolean addServerNode(NodeInfo node) {
-        lock.writeLock().lock();
-        try {
-            serverNodes.put(node.getPath(), node);
-            nodes.clear();
-            nodes.addAll(serverNodes.values());
-        } finally {
-            lock.writeLock().unlock();
-        }
+        serverNodes.put(node.getPath(), node);
+        nodes.add(node);
         return true;
     }
 
     @Override
     public boolean removeServerNode(String path) {
         boolean res = false;
-        lock.writeLock().lock();
-        try {
-            if (serverNodes.remove(path) != null) {
-                nodes.clear();
-                nodes.addAll(serverNodes.values());
-                res = true;
-            }
-        } finally {
-            lock.writeLock().unlock();
+        NodeInfo info = serverNodes.remove(path);
+        if (info != null) {
+            nodes.remove(info);
+            res = true;
         }
         return res;
     }
 
     @Override
     public NodeInfo getServer() {
-        lock.readLock().lock();
-        try {
-            if (serverNodes.isEmpty()) {
-                return null;
-            }
-            int i = Math.abs(index.incrementAndGet());
-            int key = i % serverNodes.size();
-            return nodes.get(key);
-        } finally {
-            lock.readLock().unlock();
+        if (serverNodes.isEmpty()) {
+            return null;
         }
+        int i = Math.abs(index.incrementAndGet());
+        int key = i % serverNodes.size();
+        return nodes.get(key);
     }
 
     @Override
     public int size() {
-        lock.readLock().lock();
-        try {
-            return serverNodes.size();
-        } finally {
-            lock.readLock().unlock();
-        }
+        return serverNodes.size();
     }
 }

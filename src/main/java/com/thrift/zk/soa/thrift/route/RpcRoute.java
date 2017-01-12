@@ -3,6 +3,8 @@ package com.thrift.zk.soa.thrift.route;
 import com.thrift.zk.soa.thrift.NodeInfo;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 漏油选取服务器
@@ -11,8 +13,8 @@ import java.util.*;
  * Date: 16/12/01 11:55
  */
 public abstract class RpcRoute {
-    protected Map<String, NodeInfo> serverNodes = new HashMap<String, NodeInfo>();//存放所有服务节点，创建对象时从这里提取
-    protected  List<NodeInfo> nodes = new ArrayList<NodeInfo>(10);//存放所有节点数据
+    protected Map<String, NodeInfo> serverNodes = new ConcurrentHashMap<String, NodeInfo>(16);//存放所有服务节点，创建对象时从这里提取
+    protected  List<NodeInfo> nodes = new CopyOnWriteArrayList<NodeInfo>();//存放所有节点数据
 
     /**
      * 添加一个服务节点

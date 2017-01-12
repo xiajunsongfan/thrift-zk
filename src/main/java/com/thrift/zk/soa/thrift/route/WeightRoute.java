@@ -20,19 +20,14 @@ public class WeightRoute extends RpcRoute {
     private Random random = new Random();
 
     public NodeInfo getServer() {
-        lock.readLock().lock();
-        try {
-            SortedMap<Long, String> tail = nodes.tailMap(random.nextLong());
-            String ni;
-            if (tail.isEmpty()) {
-                ni = nodes.get(nodes.firstKey());
-            } else {
-                ni = tail.get(tail.firstKey());
-            }
-            return serverNodes.get(ni);
-        } finally {
-            lock.readLock().unlock();
+        SortedMap<Long, String> tail = nodes.tailMap(random.nextLong());
+        String ni;
+        if (tail.isEmpty()) {
+            ni = nodes.get(nodes.firstKey());
+        } else {
+            ni = tail.get(tail.firstKey());
         }
+        return serverNodes.get(ni);
     }
 
     @Override
@@ -41,11 +36,13 @@ public class WeightRoute extends RpcRoute {
         String key = node.getPath();
         lock.writeLock().lock();
         try {
+            serverNodes.put(node.getPath(), node);
+            TreeMap<Long, String> newNodes = new TreeMap<Long, String>(nodes);
             for (int i = 0; i < w; i++) {
                 key = key + "-node-" + i;
-                nodes.put(MurmurHash.hash64A(key.getBytes(), key.length()), node.getPath());
+                newNodes.put(MurmurHash.hash64A(key.getBytes(), key.length()), node.getPath());
             }
-            serverNodes.put(node.getPath(), node);
+            nodes = newNodes;
         } finally {
             lock.writeLock().unlock();
         }
@@ -63,14 +60,19 @@ public class WeightRoute extends RpcRoute {
         lock.writeLock().lock();
         try {
             serverNodes.remove(key);
+            TreeMap<Long, String> newNodes = new TreeMap<Long, String>();
             Iterator<Long> it = nodes.keySet().iterator();
             while (it.hasNext()) {
                 Long key_ = it.next();
-                if (key.equals(nodes.get(key_))) {
-                    it.remove();
-                    res = true;
+                String node = nodes.get(key_);
+                if (!key.equals(node)) {
+                    newNodes.put(key_, node);
                 }
             }
+            if (newNodes.size() != nodes.size()) {
+                res = true;
+            }
+            nodes = newNodes;
         } finally {
             lock.writeLock().unlock();
         }
