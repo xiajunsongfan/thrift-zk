@@ -1,5 +1,4 @@
 ## thrift-zk
----
 ### 项目介绍：  
 集成zookeeper thrift, 服务端可多机部署，客户端自动发现服务上下线，目前实现了轮询、权重、随机三种分流
 
@@ -7,7 +6,7 @@
 ### 模块使用：
 	
 ```java
-        注意： 项目没有上传到maven仓库，使用时需要自行编译 
+        注意： 项目没有上传到maven仓库，使用时需要自行编译，项目中依赖了zkclient也需要自行编译 https://github.com/xiajunsongfan/zkclient
 	thrift server:
 	1. zookeeper管理模式：
 	public static void main(String[] args) throws Exception {
